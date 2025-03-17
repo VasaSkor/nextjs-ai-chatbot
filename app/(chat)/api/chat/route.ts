@@ -74,7 +74,7 @@ export async function POST(request: Request) {
       execute: (dataStream) => {
         const result = streamText({
           model: myProvider.languageModel(selectedChatModel),
-          system: systemPrompt({ selectedChatModel, mixinFromMemory: chat?.systemPrompt }),
+          system: systemPrompt({ selectedChatModel, mixinFromMemory: chat.systemPrompt }),
           messages,
           maxSteps: 5,
           experimental_activeTools:
