@@ -1,4 +1,4 @@
-import type { Attachment, UIMessage } from 'ai';
+import type { Attachment, Message } from 'ai';
 import { formatDistance } from 'date-fns';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
@@ -74,8 +74,8 @@ function PureArtifact({
   stop: UseChatHelpers['stop'];
   attachments: Array<Attachment>;
   setAttachments: Dispatch<SetStateAction<Array<Attachment>>>;
-  messages: Array<UIMessage>;
-  setMessages: UseChatHelpers['setMessages'];
+  messages: Array<Message>;
+  setMessages: Dispatch<SetStateAction<Array<Message>>>;
   votes: Array<Vote> | undefined;
   append: UseChatHelpers['append'];
   handleSubmit: UseChatHelpers['handleSubmit'];

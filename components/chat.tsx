@@ -1,6 +1,6 @@
 'use client';
 
-import type { Attachment, UIMessage } from 'ai';
+import type { Attachment, Message } from 'ai';
 import { useChat } from '@ai-sdk/react';
 import { useState } from 'react';
 import useSWR, { useSWRConfig } from 'swr';
@@ -13,6 +13,7 @@ import { Messages } from './messages';
 import { VisibilityType } from './visibility-selector';
 import { useArtifactSelector } from '@/hooks/use-artifact';
 import { toast } from 'sonner';
+import {Button} from "@/components/ui/button";
 
 export function Chat({
   id,
@@ -22,7 +23,7 @@ export function Chat({
   isReadonly,
 }: {
   id: string;
-  initialMessages: Array<UIMessage>;
+  initialMessages: Array<Message>;
   selectedChatModel: string;
   selectedVisibilityType: VisibilityType;
   isReadonly: boolean;
@@ -55,7 +56,7 @@ export function Chat({
   });
 
   const { data: votes } = useSWR<Array<Vote>>(
-    messages.length >= 2 ? `/api/vote?chatId=${id}` : null,
+    `/api/vote?chatId=${id}`,
     fetcher,
   );
 
@@ -73,15 +74,36 @@ export function Chat({
         />
 
         <Messages
-          chatId={id}
-          status={status}
-          votes={votes}
-          messages={messages}
-          setMessages={setMessages}
-          reload={reload}
-          isReadonly={isReadonly}
-          isArtifactVisible={isArtifactVisible}
+            chatId={id}
+            status={status}
+            votes={votes}
+            messages={messages}
+            setMessages={setMessages}
+            reload={reload}
+            isReadonly={isReadonly}
+            isArtifactVisible={isArtifactVisible}
         />
+        {messages.length < 1
+          ? (
+              <>
+                <Button onClick={async () => {
+                  await fetch('/api/character', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chatId: messages.length > 0 ? id : null, newPrompt: 'Отвечай как аниме девочка по имени РАМ' }),
+                  });
+                }}>Отвечай как аниме девочка по имени РАМ</Button>
+                <Button onClick={async () => {
+                  await fetch('/api/character', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chatId: messages.length > 0 ? id: null, newPrompt: 'Отвечай как Илон Маск' }),
+                  });
+                }}>Отвечай как Илон Маск</Button>
+              </>
+              )
+          : null
+        }
 
         <form className="flex mx-auto px-4 bg-background pb-4 md:pb-6 gap-2 w-full md:max-w-3xl">
           {!isReadonly && (

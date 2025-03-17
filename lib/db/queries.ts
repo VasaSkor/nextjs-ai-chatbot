@@ -12,11 +12,12 @@ import {
   document,
   type Suggestion,
   suggestion,
+  type Message,
   message,
   vote,
-  type DBMessage,
 } from './schema';
 import { ArtifactKind } from '@/components/artifact';
+import {regularPrompt, systemPrompt} from "@/lib/ai/prompts";
 
 // Optionally, if not using email/pass login, you can
 // use the Drizzle adapter for Auth.js / NextAuth
@@ -62,6 +63,7 @@ export async function saveChat({
       createdAt: new Date(),
       userId,
       title,
+      systemPrompt: systemPrompt({ selectedChatModel: 'chat-model-reasoning', mixinFromMemory: regularPrompt }),
     });
   } catch (error) {
     console.error('Failed to save chat in database');
@@ -104,11 +106,7 @@ export async function getChatById({ id }: { id: string }) {
   }
 }
 
-export async function saveMessages({
-  messages,
-}: {
-  messages: Array<DBMessage>;
-}) {
+export async function saveMessages({ messages }: { messages: Array<Message> }) {
   try {
     return await db.insert(message).values(messages);
   } catch (error) {
@@ -227,6 +225,18 @@ export async function getDocumentById({ id }: { id: string }) {
     console.error('Failed to get document by id from database');
     throw error;
   }
+}
+
+export async function changeSystemPromptInChat({chatId, newSystemPrompt}: {chatId: string, newSystemPrompt: string}) {
+    try {
+      await db
+          .update(chat)
+          .set({ systemPrompt: newSystemPrompt })
+          .where(eq(chat.id, chatId));
+    } catch (error) {
+      console.error('Failed to change system prompt in chat');
+      throw error;
+    }
 }
 
 export async function deleteDocumentsByIdAfterTimestamp({

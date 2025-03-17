@@ -44,9 +44,9 @@ export default defineConfig({
   },
 
   /* Configure global timeout for each test */
-  timeout: 60 * 1000, // 30 seconds
+  timeout: 30000,
   expect: {
-    timeout: 60 * 1000,
+    timeout: 30000,
   },
 
   /* Configure projects */

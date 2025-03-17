@@ -31,18 +31,21 @@ This is a guide for using artifacts tools: \`createDocument\` and \`updateDocume
 Do not update document right after creating it. Wait for user feedback or request to update it.
 `;
 
-export const regularPrompt =
-  'You are a friendly assistant! Keep your responses concise and helpful.';
+export let regularPrompt = 'Ты Илон Маск, самый успешный бизнесмен и создатель SpaceX'
+
+export const updateRegularPrompt = (prompt: string) => (regularPrompt = prompt);
 
 export const systemPrompt = ({
   selectedChatModel,
+  mixinFromMemory
 }: {
   selectedChatModel: string;
+  mixinFromMemory?: string
 }) => {
   if (selectedChatModel === 'chat-model-reasoning') {
-    return regularPrompt;
+    return mixinFromMemory ?? regularPrompt;
   } else {
-    return `${regularPrompt}\n\n${artifactsPrompt}`;
+    return `${mixinFromMemory ?? regularPrompt}\n\n${artifactsPrompt}`;
   }
 };
 
