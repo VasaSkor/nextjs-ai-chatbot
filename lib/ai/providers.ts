@@ -12,6 +12,9 @@ import {
   reasoningModel,
   titleModel,
 } from './models.test';
+import {createOpenRouter} from "@openrouter/ai-sdk-provider";
+
+const openrouter = createOpenRouter({ apiKey: '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' });
 
 export const myProvider = isTestEnvironment
   ? customProvider({
@@ -25,14 +28,14 @@ export const myProvider = isTestEnvironment
     })
   : customProvider({
       languageModels: {
-        'chat-model-small': openai('gpt-4o-mini'),
-        'chat-model-large': openai('gpt-4o'),
+        'chat-model-small': openrouter('openai/gpt-3.5-turbo'),
+        'chat-model-large': openrouter('anthropic/claude-1'),
         'chat-model-reasoning': wrapLanguageModel({
           model: fireworks('accounts/fireworks/models/deepseek-r1'),
           middleware: extractReasoningMiddleware({ tagName: 'think' }),
         }),
-        'title-model': openai('gpt-4-turbo'),
-        'artifact-model': openai('gpt-4o-mini'),
+        'title-model': openrouter('openai/gpt-3.5-turbo'),
+        'artifact-model': openrouter('openai/gpt-4o-mini'),
       },
       imageModels: {
         'small-model': openai.image('dall-e-2'),

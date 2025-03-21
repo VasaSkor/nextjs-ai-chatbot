@@ -97,9 +97,9 @@ export function Chat({
                   await fetch('/api/character', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chatId: messages.length > 0 ? id: null, newPrompt: 'Отвечай как Илон Маск' }),
+                    body: JSON.stringify({ chatId: messages.length > 0 ? id: null, newPrompt: 'Отвечай как Человек-паук' }),
                   });
-                }}>Отвечай как Илон Маск</Button>
+                }}>Отвечай как Человек-паук</Button>
               </>
               )
           : null

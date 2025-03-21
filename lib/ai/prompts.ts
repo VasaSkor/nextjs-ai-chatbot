@@ -1,4 +1,25 @@
+import fs from 'fs';
+import path from 'path';
 import { ArtifactKind } from '@/components/artifact';
+
+const PROMPT_FILE_PATH = path.join(process.cwd(), 'data', 'prompt.json');
+
+// Чтение сохранённого regularPrompt синхронно для использования в systemPrompt
+function readPromptFromFile(): string {
+  try {
+    const data = fs.readFileSync(PROMPT_FILE_PATH, 'utf8');
+    const json = JSON.parse(data);
+    return json.regularPrompt || 'Ты Илон Маск, самый успешный бизнесмен и создатель SpaceX';
+  } catch (err) {
+    return 'Ты Илон Маск, самый успешный бизнесмен и создатель SpaceX';
+  }
+}
+
+// Асинхронное обновление prompt в файле
+export async function updateRegularPrompt(newPrompt: string): Promise<void> {
+  const promptData = { regularPrompt: newPrompt };
+  await fs.promises.writeFile(PROMPT_FILE_PATH, JSON.stringify(promptData, null, 2), 'utf8');
+}
 
 export const artifactsPrompt = `
 Artifacts is a special user interface mode that helps users with writing, editing, and other content creation tasks. When artifact is open, it is on the right side of the screen, while the conversation is on the left side. When creating or updating documents, changes are reflected in real-time on the artifacts and visible to the user.
@@ -31,21 +52,22 @@ This is a guide for using artifacts tools: \`createDocument\` and \`updateDocume
 Do not update document right after creating it. Wait for user feedback or request to update it.
 `;
 
-export let regularPrompt = 'Ты Илон Маск, самый успешный бизнесмен и создатель SpaceX'
-
-export const updateRegularPrompt = (prompt: string) => (regularPrompt = prompt);
+export function getRegularPrompt(): string {
+  return readPromptFromFile();
+}
 
 export const systemPrompt = ({
-  selectedChatModel,
-  mixinFromMemory
-}: {
+                               selectedChatModel,
+                               mixinFromMemory
+                             }: {
   selectedChatModel: string;
-  mixinFromMemory?: string
+  mixinFromMemory?: string;
 }) => {
+  const storedPrompt = getRegularPrompt();
   if (selectedChatModel === 'chat-model-reasoning') {
-    return mixinFromMemory ?? regularPrompt;
+    return mixinFromMemory ?? storedPrompt;
   } else {
-    return `${mixinFromMemory ?? regularPrompt}\n\n${artifactsPrompt}`;
+    return `${mixinFromMemory ?? storedPrompt}\n\n${artifactsPrompt}`;
   }
 };
 
@@ -82,25 +104,25 @@ You are a spreadsheet creation assistant. Create a spreadsheet in csv format bas
 `;
 
 export const updateDocumentPrompt = (
-  currentContent: string | null,
-  type: ArtifactKind,
+    currentContent: string | null,
+    type: ArtifactKind,
 ) =>
-  type === 'text'
-    ? `\
+    type === 'text'
+        ? `\
 Improve the following contents of the document based on the given prompt.
 
 ${currentContent}
 `
-    : type === 'code'
-      ? `\
+        : type === 'code'
+            ? `\
 Improve the following code snippet based on the given prompt.
 
 ${currentContent}
 `
-      : type === 'sheet'
-        ? `\
+            : type === 'sheet'
+                ? `\
 Improve the following spreadsheet based on the given prompt.
 
 ${currentContent}
 `
-        : '';
+                : '';

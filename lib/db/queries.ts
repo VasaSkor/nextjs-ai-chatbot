@@ -17,7 +17,7 @@ import {
   vote,
 } from './schema';
 import { ArtifactKind } from '@/components/artifact';
-import {regularPrompt, systemPrompt} from "@/lib/ai/prompts";
+import {getRegularPrompt, systemPrompt} from "@/lib/ai/prompts";
 
 // Optionally, if not using email/pass login, you can
 // use the Drizzle adapter for Auth.js / NextAuth
@@ -63,7 +63,10 @@ export async function saveChat({
       createdAt: new Date(),
       userId,
       title,
-      systemPrompt: systemPrompt({ selectedChatModel: 'chat-model-reasoning', mixinFromMemory: regularPrompt }),
+      systemPrompt: systemPrompt({
+        selectedChatModel: 'chat-model-reasoning',
+        mixinFromMemory: getRegularPrompt(),
+      }),
     });
   } catch (error) {
     console.error('Failed to save chat in database');
