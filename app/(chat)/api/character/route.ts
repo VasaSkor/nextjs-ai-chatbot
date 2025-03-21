@@ -3,18 +3,23 @@ import { updateRegularPrompt } from "@/lib/ai/prompts";
 import { changeSystemPromptInChat } from "@/lib/db/queries";
 
 export async function POST(request: NextRequest) {
-    const body = await request.json();
+    try {
+        const body = await request.json();
+        console.log("Body:", body);
 
-    console.log(body['chatId']);
-    if (!body['chatId']) {
-        await updateRegularPrompt(body['newPrompt']);
-        return NextResponse.json({});
+        if (!body['chatId']) {
+            await updateRegularPrompt(body['newPrompt']);
+            return NextResponse.json({ success: true });
+        }
+
+        await changeSystemPromptInChat({
+            chatId: body['chatId'],
+            newSystemPrompt: body['newPrompt']
+        });
+
+        return NextResponse.json({ success: true });
+    } catch (error) {
+        console.error("API Error:", error);
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
-
-    await changeSystemPromptInChat({
-        chatId: body['chatId'],
-        newSystemPrompt: body['newPrompt']
-    });
-
-    return NextResponse.json({});
 }
