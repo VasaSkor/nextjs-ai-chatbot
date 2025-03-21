@@ -88,16 +88,14 @@ export function Chat({
               <>
                 <Button onClick={async () => {
                   await fetch('/api/character', {
-                    method: 'POST',
+                    method: 'GET',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chatId: messages.length > 0 ? id : null, newPrompt: 'Отвечай как аниме девочка по имени РАМ' }),
                   });
                 }}>Отвечай как аниме девочка по имени РАМ</Button>
                 <Button onClick={async () => {
                   await fetch('/api/character', {
-                    method: 'POST',
+                    method: 'GET',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chatId: messages.length > 0 ? id: null, newPrompt: 'Отвечай как Человек-паук' }),
                   });
                 }}>Отвечай как Человек-паук</Button>
               </>
