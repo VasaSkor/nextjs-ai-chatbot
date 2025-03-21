@@ -83,7 +83,7 @@ export function Chat({
             isReadonly={isReadonly}
             isArtifactVisible={isArtifactVisible}
         />
-        {messages.length < 2
+        {messages.length < 1
           ? (
               <>
                 <Button onClick={async () => {
