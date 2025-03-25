@@ -29,12 +29,12 @@ export const myProvider = isTestEnvironment
   : customProvider({
       languageModels: {
         'chat-model-small': openrouter('openai/gpt-3.5-turbo'),
-        'chat-model-large': openrouter('anthropic/claude-1'),
+        'chat-model-large': openrouter('deepseek/deepseek-chat-v3-0324'),
         'chat-model-reasoning': wrapLanguageModel({
           model: fireworks('accounts/fireworks/models/deepseek-r1'),
           middleware: extractReasoningMiddleware({ tagName: 'think' }),
         }),
-        'title-model': openrouter('openai/gpt-3.5-turbo'),
+        'title-model': openai('gpt-4o-mini-2024-07-18'),
         'artifact-model': openrouter('openai/gpt-4o-mini'),
       },
       imageModels: {

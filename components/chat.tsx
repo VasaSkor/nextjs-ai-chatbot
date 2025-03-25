@@ -90,16 +90,16 @@ export function Chat({
                   await fetch('/api/character', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chatId: messages.length > 0 ? id : null, newPrompt: 'Отвечай как аниме девочка по имени РАМ' }),
+                    body: JSON.stringify({ chatId: messages.length > 0 ? id : null, newPrompt: 'Отвечай как Илон Маск, человек который очень богат и любит космос' }),
                   });
-                }}>Отвечай как аниме девочка по имени РАМ</Button>
+                }}>Отвечай как Илон Маск</Button>
                 <Button onClick={async () => {
                   await fetch('/api/character', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chatId: messages.length > 0 ? id: null, newPrompt: 'Отвечай как Человек-паук' }),
+                    body: JSON.stringify({ chatId: messages.length > 0 ? id: null, newPrompt: 'Отвечай как Дональд Трамп, президент Америки' }),
                   });
-                }}>Отвечай как Человек-паук</Button>
+                }}>Отвечай как Дональд Трамп</Button>
               </>
               )
           : null

@@ -9,17 +9,17 @@ interface ChatModel {
 export const chatModels: Array<ChatModel> = [
   {
     id: 'chat-model-small',
-    name: 'Small model',
+    name: 'gpt-3.5-turbo',
     description: 'Small model for fast, lightweight tasks',
   },
   {
     id: 'chat-model-large',
-    name: 'Large model',
+    name: 'deepseek-v3',
     description: 'Large model for complex, multi-step tasks',
   },
   {
     id: 'chat-model-reasoning',
-    name: 'Reasoning model',
+    name: 'deepseek-r1',
     description: 'Uses advanced reasoning',
   },
 ];
