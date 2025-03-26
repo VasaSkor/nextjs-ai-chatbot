@@ -14,7 +14,7 @@ import {
 } from './models.test';
 import {createOpenRouter} from "@openrouter/ai-sdk-provider";
 
-const openrouter = createOpenRouter({ apiKey: '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' });
+const openrouter = createOpenRouter({ apiKey: process.env.OPENROUTER_API_KEY });
 
 export const myProvider = isTestEnvironment
   ? customProvider({
